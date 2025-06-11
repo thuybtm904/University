@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib import messages
 from django.db.models import Q, Avg, Min, Max, Count
 from django.core.paginator import Paginator
 from django.db import connection
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from .models import (
     University, Major, UniversityAdmissionRequirement, Country, 
     Program, Criteria, Ranking, RankingSource, UniversityProgram
@@ -132,33 +133,6 @@ def get_sample_universities():
             'hinh_anh': None
         }
     ]
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
 
 def trang_chu(request):
@@ -872,39 +846,102 @@ def toggle_comparison(request, university_name):
             'message': 'Có lỗi xảy ra.'
         })
 
+@csrf_exempt
 def luu_ket_qua_so_sanh(request):
-    """Lưu kết quả so sánh"""
+    """Tạo file txt để download kết quả so sánh"""
     if request.method == 'POST':
         try:
             import json
+            from datetime import datetime
+            import re
+            
             data = json.loads(request.body)
             tieu_de = data.get('tieu_de', 'So sánh trường đại học')
             ket_qua_ai = data.get('ket_qua_ai', '')
+            truong_duoc_chon = data.get('truong_duoc_chon', [])
+            ten_chuyen_nganh = data.get('ten_chuyen_nganh', '')
             
-            # Lưu vào session hoặc database
-            saved_comparisons = request.session.get('saved_comparisons', [])
-            saved_comparisons.append({
-                'tieu_de': tieu_de,
-                'ket_qua_ai': ket_qua_ai,
-                'thoi_gian': str(timezone.now())
-            })
-            request.session['saved_comparisons'] = saved_comparisons
+            # Tạo nội dung file
+            noi_dung = f"""
+===============================================
+KẾT QUẢ SO SÁNH TRƯỜNG ĐẠI HỌC
+===============================================
+
+Tiêu đề: {tieu_de}
+Chuyên ngành: {ten_chuyen_nganh}
+Thời gian tạo: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
+
+===============================================
+DANH SÁCH TRƯỜNG ĐƯỢC SO SÁNH
+===============================================
+
+"""
             
-            return JsonResponse({
-                'success': True,
-                'message': 'Đã lưu kết quả so sánh thành công!'
-            })
+            # Thêm thông tin các trường
+            for i, truong in enumerate(truong_duoc_chon, 1):
+                noi_dung += f"""
+Trường {i}: {truong.get('ten_truong', 'N/A')}
+- Quốc gia: {truong.get('quoc_gia', 'N/A')}
+- Xếp hạng thế giới: {truong.get('xep_hang_the_gioi', 'N/A')}
+- Học phí: ${truong.get('hoc_phi', 'N/A')}/năm
+- Năm thành lập: {truong.get('nam_thanh_lap', 'N/A')}
+- Thời gian học: {truong.get('thoi_gian_hoc', 'N/A')}
+- Cấp độ: {truong.get('cap_do', 'N/A')}
+- Website: {truong.get('website', 'N/A')}
+"""
+                
+                # Thêm yêu cầu tuyển sinh nếu có
+                yeu_cau = truong.get('yeu_cau_tuyen_sinh', {})
+                if yeu_cau:
+                    noi_dung += "- Yêu cầu tuyển sinh:\n"
+                    for key, value in yeu_cau.items():
+                        if isinstance(value, dict):
+                            noi_dung += f"  + {key}: {value.get('value', 'N/A')}{value.get('unit', '')}\n"
+                        else:
+                            noi_dung += f"  + {key}: {value}\n"
+                
+                noi_dung += "\n"
+            
+            # Thêm phân tích AI
+            noi_dung += f"""
+===============================================
+PHÂN TÍCH VÀ ĐÁNH GIÁ
+===============================================
+
+{ket_qua_ai}
+
+===============================================
+Báo cáo được tạo bởi Hệ thống So sánh Trường Đại học
+Thời gian: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
+===============================================
+"""
+            
+            # Tạo tên file an toàn
+            ten_file_an_toan = re.sub(r'[^\w\s-]', '', tieu_de).strip()
+            ten_file_an_toan = re.sub(r'[-\s]+', '-', ten_file_an_toan)
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            ten_file = f"so_sanh_truong_{ten_file_an_toan}_{timestamp}.txt"
+            
+            # Tạo response để download file
+            response = HttpResponse(noi_dung, content_type='text/plain; charset=utf-8')
+            response['Content-Disposition'] = f'attachment; filename="{ten_file}"'
+            response['Content-Length'] = len(noi_dung.encode('utf-8'))
+            
+            return response
+            
         except Exception as e:
-            logger.error(f"Lỗi lưu kết quả so sánh: {str(e)}")
+            logger.error(f"Lỗi tạo file so sánh: {str(e)}")
             return JsonResponse({
                 'success': False,
-                'message': 'Có lỗi xảy ra khi lưu kết quả.'
+                'message': f'Có lỗi xảy ra khi tạo file: {str(e)}'
             })
     
     return JsonResponse({
         'success': False,
         'message': 'Phương thức không được hỗ trợ.'
     })
+    
+
     
     
     

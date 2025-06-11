@@ -108,9 +108,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AI API Configuration (OpenAI hoặc các dịch vụ AI khác)
-# OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', 'YOUR KEY')
+# OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', 'YOUR KEYKEY')
 
-# HF_API_KEY = os.getenv('HF_API_KEY', 'YOUR KEY')
+# HF_API_KEY = os.getenv('HF_API_KEY', 'YOUR KEYKEY')
 
 
 # Logging configuration - FIXED encoding issue

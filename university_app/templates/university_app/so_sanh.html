@@ -620,8 +620,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Hàm lưu kết quả so sánh
+// Hàm lưu kết quả so sánh
 function luuKetQuaSoSanh() {
-    const aiContent = document.querySelector('.ai-content')?.textContent || '';
+    const aiContent = document.querySelector('.ai-content')?.innerHTML || '';
     const comparisonTitle = document.querySelector('.comparison-table-section h3')?.textContent || 'So sánh trường đại học';
     
     if (!aiContent) {
@@ -632,9 +633,20 @@ function luuKetQuaSoSanh() {
     const title = prompt('Nhập tiêu đề cho kết quả so sánh:', comparisonTitle);
     if (!title) return;
     
+    // Lấy dữ liệu trường được so sánh
+    const truongDuocChon = {{ truong_duoc_chon|safe }};
+    const tenChuyenNganh = '{{ ten_chuyen_nganh|default:"" }}';
+    
+    // Chuyển đổi HTML thành text thuần
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = aiContent;
+    const textContent = tempDiv.textContent || tempDiv.innerText || '';
+    
     const data = {
         tieu_de: title,
-        ket_qua_ai: aiContent
+        ket_qua_ai: textContent,
+        truong_duoc_chon: truongDuocChon,
+        ten_chuyen_nganh: tenChuyenNganh
     };
     
     fetch('{% url "university_app:luu_ket_qua_so_sanh" %}', {
@@ -645,17 +657,43 @@ function luuKetQuaSoSanh() {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            alert('Đã lưu kết quả so sánh thành công!');
+    .then(response => {
+        if (response.headers.get('content-type')?.includes('text/plain')) {
+            // File được trả về, tạo download
+            return response.blob().then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                
+                // Lấy tên file từ header
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'so_sanh_truong.txt';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+                
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                alert('File đã được tải xuống thành công!');
+            });
         } else {
-            alert('Có lỗi xảy ra: ' + result.message);
+            // JSON response (lỗi)
+            return response.json().then(result => {
+                alert('Có lỗi xảy ra: ' + result.message);
+            });
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Có lỗi xảy ra khi lưu kết quả.');
+        alert('Có lỗi xảy ra khi tạo file.');
     });
 }
 </script>

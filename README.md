@@ -169,5 +169,5 @@ Nếu gặp vấn đề trong quá trình cài đặt hoặc sử dụng, vui l�
 ---
 
 **Phiên bản**: 2.0  
-**Cập nhật lần cuối**: 6/2025  
+**Cập nhật lần cuối**: Tháng 1/2025  
 **Tác giả**: Django University Comparison Team

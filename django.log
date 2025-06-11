@@ -5509,3 +5509,15 @@ INFO Found 2 universities for comparison
 INFO "GET /so-sanh/?ma_chuyen_nganh=Neuroscience HTTP/1.1" 200 36416
 INFO E:\LTW\university_project\settings.py changed, reloading.
 INFO Watching for file changes with StatReloader
+INFO Watching for file changes with StatReloader
+INFO Homepage: Found 36 universities in database
+INFO "GET / HTTP/1.1" 200 31191
+WARNING Not Found: /favicon.ico
+WARNING "GET /favicon.ico HTTP/1.1" 404 3805
+INFO Looking up universities for comparison: ['Brown University', 'Carnegie Mellon University']
+INFO Found 2 universities for comparison
+INFO "GET /so-sanh/ HTTP/1.1" 200 22704
+INFO Looking up universities for comparison: ['Brown University', 'Carnegie Mellon University']
+INFO Found 2 universities for comparison
+INFO "GET /so-sanh/?ma_chuyen_nganh=English HTTP/1.1" 200 41099
+INFO "POST /so-sanh/luu/ HTTP/1.1" 200 2579
