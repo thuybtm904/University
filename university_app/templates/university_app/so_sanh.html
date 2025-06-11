@@ -1,0 +1,662 @@
+{% extends 'university_app/base.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% load dict_extras %}
+
+{% block title %}So Sánh Trường Đại Học{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb" class="bg-light py-3">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'university_app:trang_chu' %}">Trang Chủ</a></li>
+            <li class="breadcrumb-item active">So Sánh</li>
+        </ol>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Header -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header text-center mb-5">
+                <h1 class="fw-bold">
+                    <i class="fas fa-balance-scale text-primary me-3"></i>
+                    So Sánh Trường Đại Học
+                </h1>
+                <p class="lead text-muted">
+                    So sánh chi tiết các trường đại học với sự hỗ trợ của AI
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison List Management -->
+    {% if show_comparison_interface %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="comparison-management-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="fw-bold mb-0">
+                        <i class="fas fa-list text-primary me-2"></i>
+                        Danh Sách So Sánh ({{ comparison_count }}/5)
+                    </h3>
+                    <a href="{% url 'university_app:so_sanh' %}?clear_all=true" 
+                       class="btn btn-outline-danger"
+                       onclick="return confirm('Bạn có chắc muốn xóa toàn bộ danh sách so sánh?')">
+                        <i class="fas fa-trash me-2"></i>Xóa Tất Cả
+                    </a>
+                </div>
+                
+                <div class="comparison-universities">
+                    {% for university in comparison_list %}
+                    <div class="university-comparison-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="university-info">
+                                <h5 class="mb-1">{{ university }}</h5>
+                                <small class="text-muted">
+                                    <i class="fas fa-university me-1"></i>Trường đại học
+                                </small>
+                            </div>
+                            <a href="{% url 'university_app:so_sanh' %}?remove_university={{ university }}" 
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Bạn có chắc muốn xóa {{ university }} khỏi danh sách so sánh?')">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Major Selection for Comparison -->
+                {% if comparison_count >= 2 %}
+                <div class="major-selection-section mt-4">
+                    <h4 class="fw-bold mb-3">
+                        <i class="fas fa-graduation-cap me-2"></i>Chọn Chuyên Ngành So Sánh
+                    </h4>
+                    
+                    {% if common_majors %}
+                    <p class="text-muted mb-3">
+                        Chỉ hiển thị các chuyên ngành có ở tất cả {{ comparison_count }} trường được chọn
+                    </p>
+                    
+                    <form method="GET" action="{% url 'university_app:so_sanh' %}">
+                        <div class="row g-3">
+                            <div class="col-lg-8">
+                                <select name="ma_chuyen_nganh" class="form-select form-select-lg" required>
+                                    <option value="">Chọn chuyên ngành để so sánh...</option>
+                                    {% for major in common_majors %}
+                                    <option value="{{ major.name }}" 
+                                            {% if ma_chuyen_nganh_chon == major.name %}selected{% endif %}>
+                                        {{ major.name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-lg-4">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="fas fa-balance-scale me-2"></i>So Sánh Ngay
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Các trường đã chọn không có chuyên ngành chung nào. Vui lòng thêm các trường có chuyên ngành tương tự.
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+
+
+
+
+    <!-- Comparison Results -->
+    {% if da_co_ket_qua and truong_duoc_chon %}
+    <div class="comparison-results">
+        <!-- AI Analysis Section -->
+        {% if ket_qua_ai %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="ai-analysis-section" id="ai-analysis-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold mb-0">
+                            <i class="fas fa-robot text-white me-2"></i>
+                            Phân Tích AI - {{ ten_chuyen_nganh }}
+                        </h3>
+                        <div>
+                            <button type="button" class="btn btn-light me-2" id="toggle-ai-btn">
+                                <i class="fas fa-eye me-2"></i><span id="toggle-text">Ẩn</span>
+                            </button>
+                            <button type="button" class="btn btn-light" onclick="luuKetQuaSoSanh()">
+                                <i class="fas fa-save me-2"></i>Lưu Kết Quả
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-content-wrapper" id="ai-content-wrapper">
+                        <div class="ai-content" id="ai-content-main">
+                            <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">{{ ket_qua_ai }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Comparison Table -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="comparison-table-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-bold mb-0">
+                            <i class="fas fa-table text-primary me-2"></i>
+                            Bảng So Sánh Chi Tiết - {{ ten_chuyen_nganh }}
+                        </h3>
+                        <a href="{% url 'university_app:so_sanh' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-plus me-2"></i>Thêm Trường Khác
+                        </a>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered comparison-table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col" class="criteria-col">Tiêu Chí</th>
+                                    {% for truong in truong_duoc_chon %}
+                                    <th scope="col" class="text-center university-col">
+                                        <div class="university-header-cell">
+                                            <div class="university-name">{{ truong.ten_truong }}</div>
+                                            <div class="university-actions mt-2">
+                                                <a href="{% url 'university_app:so_sanh' %}?remove_university={{ truong.ten_truong }}" 
+                                                   class="btn btn-outline-light btn-sm"
+                                                   onclick="return confirm('Xóa {{ truong.ten_truong }} khỏi so sánh?')">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-globe me-2"></i>Quốc Gia
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">{{ truong.quoc_gia }}</td>
+                                    {% endfor %}
+                                </tr>
+                                
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-trophy me-2"></i>Xếp Hạng Thế Giới
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">
+                                        {% if truong.xep_hang_the_gioi %}
+                                            <span class="badge bg-success">Top {{ truong.xep_hang_the_gioi }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Chưa có</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-dollar-sign me-2"></i>Học Phí (USD/năm)
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">
+                                        {% if truong.hoc_phi %}
+                                            <span class="fw-bold text-warning">${{ truong.hoc_phi|floatformat:0 }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Chưa có</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-calendar me-2"></i>Năm Thành Lập
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">
+                                        {% if truong.nam_thanh_lap %}
+                                            <span class="badge bg-info">{{ truong.nam_thanh_lap }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Chưa có</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-clock me-2"></i>Thời Gian Học
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">
+                                        {% if truong.thoi_gian_hoc %}
+                                            <span class="badge bg-primary">{{ truong.thoi_gian_hoc }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Chưa có</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-graduation-cap me-2"></i>Cấp Độ
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">
+                                        {% if truong.cap_do %}
+                                            <span class="badge bg-secondary">{{ truong.cap_do }}</span>
+                                        {% else %}
+                                            <span class="text-muted">Chưa có</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                
+                                <!-- Yêu cầu tuyển sinh -->
+                                {% if truong_duoc_chon.0.yeu_cau_tuyen_sinh %}
+                                    {% for criteria, value in truong_duoc_chon.0.yeu_cau_tuyen_sinh.items %}
+                                    <tr>
+                                        <td class="fw-bold bg-light">
+                                            <i class="fas fa-clipboard-check me-2"></i>{{ criteria }}
+                                        </td>
+                                        {% for truong in truong_duoc_chon %}
+                                        <td class="text-center">
+                                            {% if truong.yeu_cau_tuyen_sinh and criteria in truong.yeu_cau_tuyen_sinh %}
+                                                <span class="badge bg-warning text-dark">{{ truong.yeu_cau_tuyen_sinh|lookup:criteria }}</span>
+                                            {% else %}
+                                                <span class="text-muted">Chưa có</span>
+                                            {% endif %}
+                                        </td>
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                
+                                <tr>
+                                    <td class="fw-bold bg-light">
+                                        <i class="fas fa-link me-2"></i>Website
+                                    </td>
+                                    {% for truong in truong_duoc_chon %}
+                                    <td class="text-center">
+                                        {% if truong.website %}
+                                            <a href="http://{{ truong.website }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-external-link-alt me-1"></i>Truy cập
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted">Chưa có</span>
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Biểu đồ học phí theo chuyên ngành</h3>
+<canvas id="tuitionChart" width="800" height="400"></canvas>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const rawTuitionData = {{ tuition_chart_data|safe }};
+        const selectedMajor = "{{ ten_chuyen_nganh }}";  // đã có trong context
+        
+        const labels = [];
+        const data = [];
+
+        for (const uniName in rawTuitionData) {
+            const majors = rawTuitionData[uniName];
+            if (selectedMajor in majors) {
+                // Tính học phí trung bình nếu có nhiều chương trình cùng ngành
+                const tuitionList = majors[selectedMajor];
+                const avgTuition = tuitionList.reduce((a, b) => a + b, 0) / tuitionList.length;
+                labels.push(uniName);
+                data.push(avgTuition);
+            }
+        }
+
+        const ctx = document.getElementById('tuitionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Học phí trung bình (USD)',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'USD'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `So sánh học phí chuyên ngành "${selectedMajor}"`
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+
+    {% else %}
+    <!-- Welcome Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="welcome-section text-center py-5">
+                <i class="fas fa-balance-scale fa-4x text-primary mb-4"></i>
+                <h2 class="fw-bold mb-3">So Sánh Trường Đại Học Thông Minh</h2>
+                <p class="lead text-muted mb-4">
+                    Sử dụng công nghệ AI để so sánh chi tiết các trường đại học<br>
+                    và tìm ra lựa chọn phù hợp nhất cho bạn
+                </p>
+                
+                {% if not show_comparison_interface %}
+                <div class="getting-started mb-4">
+                    <h4 class="fw-bold mb-3">Cách bắt đầu:</h4>
+                    <ol class="list-unstyled text-start" style="max-width: 600px; margin: 0 auto;">
+                        <li class="mb-2">
+                            <span class="badge bg-primary rounded-pill me-2">1</span>
+                            Đi tới <a href="{% url 'university_app:tim_kiem' %}" class="text-decoration-none">trang tìm kiếm</a>
+                        </li>
+                        <li class="mb-2">
+                            <span class="badge bg-primary rounded-pill me-2">2</span>
+                            Nhấn nút <strong>"+So Sánh"</strong> tại các trường bạn quan tâm
+                        </li>
+                        <li class="mb-2">
+                            <span class="badge bg-primary rounded-pill me-2">3</span>
+                            Quay lại đây để chọn chuyên ngành và so sánh
+                        </li>
+                    </ol>
+                </div>
+                
+                <a href="{% url 'university_app:tim_kiem' %}" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-search me-2"></i>Bắt Đầu Tìm Kiếm
+                </a>
+                {% endif %}
+                
+                <div class="features-preview mt-5">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="feature-card">
+                                <i class="fas fa-graduation-cap fa-2x text-primary mb-3"></i>
+                                <h5>So Sánh Chuyên Ngành</h5>
+                                <p class="text-muted">Chi tiết về các chuyên ngành và yêu cầu tuyển sinh</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-card">
+                                <i class="fas fa-chart-line fa-2x text-success mb-3"></i>
+                                <h5>Xếp Hạng & Chi Phí</h5>
+                                <p class="text-muted">Thông tin xếp hạng và học phí của các trường</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="feature-card">
+                                <i class="fas fa-robot fa-2x text-info mb-3"></i>
+                                <h5>Phân Tích AI</h5>
+                                <p class="text-muted">Gợi ý thông minh dựa trên dữ liệu thực tế</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .comparison-management-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .university-comparison-item {
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+    
+    .university-comparison-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .major-selection-section {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+    }
+    
+    .ai-analysis-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        position: relative;
+    }
+    
+    .ai-content-wrapper {
+        transition: all 0.5s ease;
+        overflow: hidden;
+    }
+    
+    .ai-content-wrapper.hidden {
+        max-height: 0 !important;
+        opacity: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .ai-content {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        margin-bottom: 0;
+    }
+    
+    .comparison-table-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .comparison-table th {
+        background: #343a40 !important;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+    }
+    
+    .comparison-table .criteria-col {
+        width: 200px;
+        min-width: 200px;
+    }
+    
+    .comparison-table .university-col {
+        min-width: 200px;
+    }
+    
+    .university-header-cell {
+        padding: 0.5rem;
+    }
+    
+    .university-name {
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+    
+    .comparison-table td {
+        vertical-align: middle;
+        padding: 1rem;
+    }
+    
+    .welcome-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .getting-started {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 2rem;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+    }
+    
+    @media (max-width: 768px) {
+        .comparison-management-section {
+            padding: 1.5rem 1rem;
+        }
+        
+        .comparison-table {
+            font-size: 0.875rem;
+        }
+        
+        .ai-analysis-section {
+            padding: 1.5rem;
+        }
+        
+        .university-header-cell {
+            padding: 0.25rem;
+        }
+        
+        .university-name {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle AI Content
+    const toggleBtn = document.getElementById('toggle-ai-btn');
+    const aiWrapper = document.getElementById('ai-content-wrapper');
+    const toggleText = document.getElementById('toggle-text');
+    
+    if (toggleBtn && aiWrapper && toggleText) {
+        let isHidden = false;
+        
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (isHidden) {
+                aiWrapper.classList.remove('hidden');
+                toggleText.textContent = 'Ẩn';
+                toggleBtn.querySelector('i').className = 'fas fa-eye me-2';
+                isHidden = false;
+            } else {
+                aiWrapper.classList.add('hidden');
+                toggleText.textContent = 'Hiện';
+                toggleBtn.querySelector('i').className = 'fas fa-eye-slash me-2';
+                isHidden = true;
+            }
+        });
+    }
+});
+
+// Hàm lưu kết quả so sánh
+function luuKetQuaSoSanh() {
+    const aiContent = document.querySelector('.ai-content')?.textContent || '';
+    const comparisonTitle = document.querySelector('.comparison-table-section h3')?.textContent || 'So sánh trường đại học';
+    
+    if (!aiContent) {
+        alert('Không có kết quả so sánh để lưu.');
+        return;
+    }
+    
+    const title = prompt('Nhập tiêu đề cho kết quả so sánh:', comparisonTitle);
+    if (!title) return;
+    
+    const data = {
+        tieu_de: title,
+        ket_qua_ai: aiContent
+    };
+    
+    fetch('{% url "university_app:luu_ket_qua_so_sanh" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert('Đã lưu kết quả so sánh thành công!');
+        } else {
+            alert('Có lỗi xảy ra: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra khi lưu kết quả.');
+    });
+}
+</script>
+{% endblock %}

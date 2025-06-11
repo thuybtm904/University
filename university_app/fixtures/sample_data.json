@@ -1,0 +1,527 @@
+[
+  {
+    "model": "university_app.quocgia",
+    "pk": 1,
+    "fields": {
+      "ten_quoc_gia": "Hoa Kỳ",
+      "ma_quoc_gia_iso": "USA",
+      "chau_luc": "Bắc Mỹ"
+    }
+  },
+  {
+    "model": "university_app.quocgia", 
+    "pk": 2,
+    "fields": {
+      "ten_quoc_gia": "Vương quốc Anh",
+      "ma_quoc_gia_iso": "GBR",
+      "chau_luc": "Châu Âu"
+    }
+  },
+  {
+    "model": "university_app.quocgia",
+    "pk": 3,
+    "fields": {
+      "ten_quoc_gia": "Canada",
+      "ma_quoc_gia_iso": "CAN", 
+      "chau_luc": "Bắc Mỹ"
+    }
+  },
+  {
+    "model": "university_app.quocgia",
+    "pk": 4,
+    "fields": {
+      "ten_quoc_gia": "Úc",
+      "ma_quoc_gia_iso": "AUS",
+      "chau_luc": "Châu Úc"
+    }
+  },
+  {
+    "model": "university_app.chuyennganh",
+    "pk": 1,
+    "fields": {
+      "ten_chuyen_nganh": "Khoa học Máy tính",
+      "mo_ta": "Chuyên ngành nghiên cứu về thuật toán, lập trình và hệ thống máy tính",
+      "linh_vuc": "CNTT"
+    }
+  },
+  {
+    "model": "university_app.chuyennganh",
+    "pk": 2,
+    "fields": {
+      "ten_chuyen_nganh": "Quản trị Kinh doanh",
+      "mo_ta": "Chuyên ngành về quản lý, lãnh đạo và phát triển doanh nghiệp",
+      "linh_vuc": "KINH_TE"
+    }
+  },
+  {
+    "model": "university_app.chuyennganh",
+    "pk": 3,
+    "fields": {
+      "ten_chuyen_nganh": "Kỹ thuật Cơ khí",
+      "mo_ta": "Chuyên ngành thiết kế, sản xuất và bảo trì máy móc, thiết bị",
+      "linh_vuc": "KY_THUAT"
+    }
+  },
+  {
+    "model": "university_app.chuyennganh", 
+    "pk": 4,
+    "fields": {
+      "ten_chuyen_nganh": "Y khoa",
+      "mo_ta": "Chuyên ngành đào tạo bác sĩ, nghiên cứu về sức khỏe con người",
+      "linh_vuc": "Y_KHOA"
+    }
+  },
+  {
+    "model": "university_app.chuyennganh", 
+    "pk": 5,
+    "fields": {
+      "ten_chuyen_nganh": "Kinh tế học",
+      "mo_ta": "Chuyên ngành nghiên cứu về thị trường, tài chính và chính sách kinh tế",
+      "linh_vuc": "KINH_TE"
+    }
+  },
+  {
+    "model": "university_app.truongdaihoc",
+    "pk": 1,
+    "fields": {
+      "ten_truong": "Đại học Harvard", 
+      "quoc_gia": 1,
+      "mo_ta": "Đại học Harvard là một trong những trường đại học danh giá nhất thế giới, được thành lập năm 1636 tại Cambridge, Massachusetts.",
+      "website": "https://www.harvard.edu",
+      "nam_thanh_lap": 1636,
+      "xep_hang_the_gioi": 1,
+      "so_luong_sinh_vien": 23000,
+      "hoc_phi_trung_binh": "57261.00",
+      "dia_chi": "Cambridge, Massachusetts, USA",
+      "hinh_anh": "https://www.harvard.edu/wp-content/uploads/2023/01/harvard-university-logo.png"
+    }
+  },
+  {
+    "model": "university_app.truongdaihoc",
+    "pk": 2, 
+    "fields": {
+      "ten_truong": "Đại học Oxford",
+      "quoc_gia": 2,
+      "mo_ta": "Đại học Oxford là trường đại học lâu đời nhất trong thế giới nói tiếng Anh, được thành lập vào thế kỷ 12.",
+      "website": "https://www.ox.ac.uk",
+      "nam_thanh_lap": 1096,
+      "xep_hang_the_gioi": 2,
+      "so_luong_sinh_vien": 24000,
+      "hoc_phi_trung_binh": "45000.00", 
+      "dia_chi": "Oxford, England, UK",
+      "hinh_anh": "https://www.ox.ac.uk/sites/files/oxford/styles/ow_large_feature/public/field/field_image_main/b_AllSoulsquad.jpg"
+    }
+  },
+  {
+    "model": "university_app.truongdaihoc",
+    "pk": 3,
+    "fields": {
+      "ten_truong": "Đại học Toronto",
+      "quoc_gia": 3,
+      "mo_ta": "Đại học Toronto là một trong những trường đại học nghiên cứu hàng đầu Canada và thế giới.",
+      "website": "https://www.utoronto.ca",
+      "nam_thanh_lap": 1827,
+      "xep_hang_the_gioi": 18,
+      "so_luong_sinh_vien": 97000,
+      "hoc_phi_trung_binh": "35000.00",
+      "dia_chi": "Toronto, Ontario, Canada", 
+      "hinh_anh": "https://www.utoronto.ca/sites/default/files/2021-06/UofT-campus.jpg"
+    }
+  },
+  {
+    "model": "university_app.truongdaihoc",
+    "pk": 4,
+    "fields": {
+      "ten_truong": "Đại học Melbourne",
+      "quoc_gia": 4,
+      "mo_ta": "Đại học Melbourne là trường đại học hàng đầu của Úc, nổi tiếng về nghiên cứu và giảng dạy chất lượng cao.",
+      "website": "https://www.unimelb.edu.au",
+      "nam_thanh_lap": 1853,
+      "xep_hang_the_gioi": 33,
+      "so_luong_sinh_vien": 50000,
+      "hoc_phi_trung_binh": "32000.00",
+      "dia_chi": "Melbourne, Victoria, Australia",
+      "hinh_anh": "https://www.unimelb.edu.au/sites/default/files/2021-03/campus-image.jpg"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 1,
+    "fields": {
+      "truong_dai_hoc": 1,
+      "chuyen_nganh": 1,
+      "diem_gpa_toi_thieu": "3.90",
+      "loai_ngoai_ngu": "TOEFL",
+      "diem_ngoai_ngu_toi_thieu": "110.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm lập trình, dự án nghiên cứu",
+      "yeu_cau_tai_lieu": "Thư giới thiệu, luận văn cá nhân, portfolio",
+      "hoc_phi": "57261.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "15.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-01-01",
+      "ty_le_chap_nhan": "3.40"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 2,
+    "fields": {
+      "truong_dai_hoc": 1,
+      "chuyen_nganh": 2,
+      "diem_gpa_toi_thieu": "3.80",
+      "loai_ngoai_ngu": "TOEFL", 
+      "diem_ngoai_ngu_toi_thieu": "105.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm thực tập tại doanh nghiệp",
+      "yeu_cau_tai_lieu": "Thư giới thiệu, luận văn về lãnh đạo, CV",
+      "hoc_phi": "57261.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "12.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-01-01",
+      "ty_le_chap_nhan": "5.20"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 3,
+    "fields": {
+      "truong_dai_hoc": 1,
+      "chuyen_nganh": 3,
+      "diem_gpa_toi_thieu": "3.75",
+      "loai_ngoai_ngu": "TOEFL", 
+      "diem_ngoai_ngu_toi_thieu": "100.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm thiết kế cơ khí, thực tập kỹ thuật",
+      "yeu_cau_tai_lieu": "Thư giới thiệu, portfolio dự án kỹ thuật",
+      "hoc_phi": "55000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "18.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-01-01",
+      "ty_le_chap_nhan": "6.80"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 4,
+    "fields": {
+      "truong_dai_hoc": 1,
+      "chuyen_nganh": 4,
+      "diem_gpa_toi_thieu": "3.95",
+      "loai_ngoai_ngu": "TOEFL", 
+      "diem_ngoai_ngu_toi_thieu": "115.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm nghiên cứu y khoa, thực tập bệnh viện",
+      "yeu_cau_tai_lieu": "Thư giới thiệu từ bác sĩ, luận văn nghiên cứu",
+      "hoc_phi": "65000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "10.00",
+      "thoi_gian_hoc": 6,
+      "han_nop_ho_so": "2024-01-01",
+      "ty_le_chap_nhan": "2.30"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 5,
+    "fields": {
+      "truong_dai_hoc": 1,
+      "chuyen_nganh": 5,
+      "diem_gpa_toi_thieu": "3.85",
+      "loai_ngoai_ngu": "TOEFL", 
+      "diem_ngoai_ngu_toi_thieu": "108.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm nghiên cứu kinh tế, thực tập ngân hàng",
+      "yeu_cau_tai_lieu": "Thư giới thiệu, luận văn về kinh tế",
+      "hoc_phi": "52000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "14.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-01-01",
+      "ty_le_chap_nhan": "7.50"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 6,
+    "fields": {
+      "truong_dai_hoc": 2,
+      "chuyen_nganh": 1,
+      "diem_gpa_toi_thieu": "3.70",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "7.50",
+      "yeu_cau_kinh_nghiem": "Dự án phần mềm, nghiên cứu khoa học",
+      "yeu_cau_tai_lieu": "Statement of purpose, academic references",
+      "hoc_phi": "45000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "20.00",
+      "thoi_gian_hoc": 3,
+      "han_nop_ho_so": "2024-01-15",
+      "ty_le_chap_nhan": "8.50"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 7,
+    "fields": {
+      "truong_dai_hoc": 2,
+      "chuyen_nganh": 2,
+      "diem_gpa_toi_thieu": "3.65",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "7.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm quản lý, lãnh đạo đội nhóm",
+      "yeu_cau_tai_lieu": "Personal statement, leadership portfolio",
+      "hoc_phi": "43000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "22.00",
+      "thoi_gian_hoc": 3,
+      "han_nop_ho_so": "2024-01-15",
+      "ty_le_chap_nhan": "12.30"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 8,
+    "fields": {
+      "truong_dai_hoc": 2,
+      "chuyen_nganh": 3,
+      "diem_gpa_toi_thieu": "3.60",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "6.50",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm kỹ thuật cơ khí, thiết kế CAD",
+      "yeu_cau_tai_lieu": "Technical portfolio, engineering projects",
+      "hoc_phi": "42000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "25.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-01-15",
+      "ty_le_chap_nhan": "15.20"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 9,
+    "fields": {
+      "truong_dai_hoc": 2,
+      "chuyen_nganh": 4,
+      "diem_gpa_toi_thieu": "3.90",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "8.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm nghiên cứu y khoa, volunteer bệnh viện",
+      "yeu_cau_tai_lieu": "Medical research experience, clinical references",
+      "hoc_phi": "55000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "15.00",
+      "thoi_gian_hoc": 6,
+      "han_nop_ho_so": "2024-01-15",
+      "ty_le_chap_nhan": "4.20"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 10,
+    "fields": {
+      "truong_dai_hoc": 2,
+      "chuyen_nganh": 5,
+      "diem_gpa_toi_thieu": "3.75",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "7.50",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm nghiên cứu kinh tế, thực tập tài chính",
+      "yeu_cau_tai_lieu": "Economics research, financial analysis projects",
+      "hoc_phi": "41000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "18.00",
+      "thoi_gian_hoc": 3,
+      "han_nop_ho_so": "2024-01-15",
+      "ty_le_chap_nhan": "9.80"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 11,
+    "fields": {
+      "truong_dai_hoc": 3,
+      "chuyen_nganh": 1,
+      "diem_gpa_toi_thieu": "3.50",
+      "loai_ngoai_ngu": "TOEFL",
+      "diem_ngoai_ngu_toi_thieu": "100.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm lập trình, tham gia hackathon",
+      "yeu_cau_tai_lieu": "Thư giới thiệu, bài luận cá nhân",
+      "hoc_phi": "35000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "25.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-02-01", 
+      "ty_le_chap_nhan": "15.30"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 12,
+    "fields": {
+      "truong_dai_hoc": 3,
+      "chuyen_nganh": 2,
+      "diem_gpa_toi_thieu": "3.45",
+      "loai_ngoai_ngu": "TOEFL",
+      "diem_ngoai_ngu_toi_thieu": "95.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm quản lý, startup experience",
+      "yeu_cau_tai_lieu": "Business plan, leadership examples",
+      "hoc_phi": "33000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "28.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-02-01", 
+      "ty_le_chap_nhan": "18.70"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 13,
+    "fields": {
+      "truong_dai_hoc": 3,
+      "chuyen_nganh": 3,
+      "diem_gpa_toi_thieu": "3.40",
+      "loai_ngoai_ngu": "TOEFL",
+      "diem_ngoai_ngu_toi_thieu": "90.00",
+      "yeu_cau_kinh_nghiem": "Kinh nghiệm kỹ thuật, thiết kế mechanical",
+      "yeu_cau_tai_lieu": "Engineering portfolio, project documentation",
+      "hoc_phi": "32000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "30.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-02-01", 
+      "ty_le_chap_nhan": "22.50"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 14,
+    "fields": {
+      "truong_dai_hoc": 3,
+      "chuyen_nganh": 4,
+      "diem_gpa_toi_thieu": "3.80",
+      "loai_ngoai_ngu": "TOEFL",
+      "diem_ngoai_ngu_toi_thieu": "105.00",
+      "yeu_cau_kinh_nghiem": "Medical volunteer, research experience",
+      "yeu_cau_tai_lieu": "Medical school prerequisites, MCAT scores",
+      "hoc_phi": "45000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "20.00",
+      "thoi_gian_hoc": 6,
+      "han_nop_ho_so": "2024-02-01", 
+      "ty_le_chap_nhan": "8.90"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 15,
+    "fields": {
+      "truong_dai_hoc": 3,
+      "chuyen_nganh": 5,
+      "diem_gpa_toi_thieu": "3.55",
+      "loai_ngoai_ngu": "TOEFL",
+      "diem_ngoai_ngu_toi_thieu": "98.00",
+      "yeu_cau_kinh_nghiem": "Economics research, internship experience",
+      "yeu_cau_tai_lieu": "Economic analysis projects, academic papers",
+      "hoc_phi": "31000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "26.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-02-01", 
+      "ty_le_chap_nhan": "16.40"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 16,
+    "fields": {
+      "truong_dai_hoc": 4,
+      "chuyen_nganh": 1,
+      "diem_gpa_toi_thieu": "3.40",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "6.50",
+      "yeu_cau_kinh_nghiem": "Kiến thức cơ bản về lập trình",
+      "yeu_cau_tai_lieu": "Academic transcripts, personal statement",
+      "hoc_phi": "32000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "30.00",
+      "thoi_gian_hoc": 3,
+      "han_nop_ho_so": "2024-01-31",
+      "ty_le_chap_nhan": "22.10"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 17,
+    "fields": {
+      "truong_dai_hoc": 4,
+      "chuyen_nganh": 2,
+      "diem_gpa_toi_thieu": "3.35",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "6.00",
+      "yeu_cau_kinh_nghiem": "Business experience, teamwork skills",
+      "yeu_cau_tai_lieu": "CV, business case studies",
+      "hoc_phi": "30000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "32.00",
+      "thoi_gian_hoc": 3,
+      "han_nop_ho_so": "2024-01-31",
+      "ty_le_chap_nhan": "25.80"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 18,
+    "fields": {
+      "truong_dai_hoc": 4,
+      "chuyen_nganh": 3,
+      "diem_gpa_toi_thieu": "3.30",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "6.00",
+      "yeu_cau_kinh_nghiem": "Technical skills, engineering background",
+      "yeu_cau_tai_lieu": "Engineering portfolio, technical projects",
+      "hoc_phi": "29000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "35.00",
+      "thoi_gian_hoc": 4,
+      "han_nop_ho_so": "2024-01-31",
+      "ty_le_chap_nhan": "28.50"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 19,
+    "fields": {
+      "truong_dai_hoc": 4,
+      "chuyen_nganh": 4,
+      "diem_gpa_toi_thieu": "3.70",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "7.00",
+      "yeu_cau_kinh_nghiem": "Healthcare experience, volunteer work",
+      "yeu_cau_tai_lieu": "Medical prerequisites, health science background",
+      "hoc_phi": "38000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "25.00",
+      "thoi_gian_hoc": 6,
+      "han_nop_ho_so": "2024-01-31",
+      "ty_le_chap_nhan": "12.70"
+    }
+  },
+  {
+    "model": "university_app.yeucautuyensinh",
+    "pk": 20,
+    "fields": {
+      "truong_dai_hoc": 4,
+      "chuyen_nganh": 5,
+      "diem_gpa_toi_thieu": "3.45",
+      "loai_ngoai_ngu": "IELTS",
+      "diem_ngoai_ngu_toi_thieu": "6.50",
+      "yeu_cau_kinh_nghiem": "Economics background, analytical skills",
+      "yeu_cau_tai_lieu": "Economic research, statistical analysis projects",
+      "hoc_phi": "28000.00",
+      "co_hoc_bong": true,
+      "ty_le_nhan_hoc_bong": "33.00",
+      "thoi_gian_hoc": 3,
+      "han_nop_ho_so": "2024-01-31",
+      "ty_le_chap_nhan": "19.60"
+    }
+  }
+]
